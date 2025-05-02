@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: default
+
+  application:
+    name: cinema-info-service
+    version: 0.0.1-SNAPSHOT
+
+  datasource:
+    url: jdbc:postgresql://db:5432/cinema_db
+    username: cinema_user
+    password: cinema_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  thymeleaf:
+    cache: false
+
+server:
+  port: 8080
+
+jwt:
+  secret: 18t4uejdsi1990@)WOI@kkeifkwokooO@I!)@$)5IW9FI92JRFI319U68TEFWJ39212I9FKG348FJ
+  expiration-ms: 86400000

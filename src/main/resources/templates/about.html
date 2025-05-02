@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Об авторе — Ваш Кинотеатр</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"/>
+    <style>
+        .hero {
+            background: url('/images/960x540.webp') center/cover no-repeat;
+            color: #fff;
+            padding: 6rem 0;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+        }
+        .author-photo {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">Ваш Кинотеатр</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Главная</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/movies}">Кинофильмы</a></li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}">Войти</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/signup}">Регистрация</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/profile}">Профиль</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">Выход</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="hero text-center">
+    <div class="container">
+        <h1 class="display-4">Знакомьтесь: автор проекта</h1>
+        <p class="lead">За каждой строчкой кода — история любви к кино и технологиям.</p>
+    </div>
+</section>
+
+<div class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-md-4 text-center mb-4 mb-md-0">
+            <img src="/images/George_Floyd.png"
+                 alt="Фото автора"
+                 class="author-photo"/>
+        </div>
+        <div class="col-md-8">
+            <h2>Иван Иванов</h2>
+            <p>Привет! Меня зовут Иван, и я — разработчик этого Информационно-Справочного Сервиса для кинотеатра. В мире Java и Spring я уже более 5 лет, но моя настоящая страсть — большие экраны и истории, которые они рассказывают.</p>
+            <p>Этот проект я создавал с душой: максимально простой и удобный интерфейс, надёжная авторизация через JWT, красивые страницы на Bootstrap и гибкий REST API. Надеюсь, он поможет вам быстро находить нужную информацию о фильмах, оставлять отзывы и приобретать билеты.</p>
+            <p>Когда я не за ноутбуком, вы можете найти меня в зале на премьерных показах или за просмотром классики в уютном кресле. Давайте вместе подарим себе незабываемые эмоции!</p>
+            <a class="btn btn-primary mt-3" th:href="@{/}">← На главную</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
