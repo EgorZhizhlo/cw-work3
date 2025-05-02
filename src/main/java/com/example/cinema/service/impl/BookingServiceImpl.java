@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,13 +49,24 @@ public class BookingServiceImpl implements BookingService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
-        // Проверить, что место ещё не занято
-        boolean exists = bookingRepository.findByScheduleAndSeatNumber(schedule, request.getSeatNumber())
-                .isPresent();
-        if (exists) {
-            throw new IllegalArgumentException("Место " + request.getSeatNumber() + " уже забронировано");
+        // Попытаться найти существующую бронь по сеансу и месту
+        Optional<Booking> optBooking = bookingRepository
+                .findByScheduleAndSeatNumber(schedule, request.getSeatNumber());
+
+        if (optBooking.isPresent()) {
+            Booking existing = optBooking.get();
+            if (existing.getStatus() == BookingStatus.ACTIVE) {
+                // Уже занято активной бронью
+                throw new IllegalArgumentException("Место " + request.getSeatNumber() + " уже забронировано");
+            }
+            // Статус CANCELLED — можно «реактивировать» бронь
+            existing.setUser(user);
+            existing.setStatus(BookingStatus.ACTIVE);
+            Booking saved = bookingRepository.save(existing);
+            return EntityDtoMapper.toDto(saved);
         }
 
+        // Нет даже отменённой — создаём новую запись
         Booking booking = Booking.builder()
                 .schedule(schedule)
                 .user(user)
@@ -65,6 +77,7 @@ public class BookingServiceImpl implements BookingService {
         Booking saved = bookingRepository.save(booking);
         return EntityDtoMapper.toDto(saved);
     }
+
 
     @Override
     public void cancelBooking(Long bookingId) {
